@@ -1,23 +1,35 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import {Link} from 'react-router-dom'
-import {useForm, userForm} from 'react-hook-form'
+import {useForm} from 'react-hook-form'
+import firebase from '../../firebase'
 
 function RegisterPage() {
 
-    // useForm에서 메소드 꺼냄
-    const { register, watch, errors } = useForm({mode:'onChange'})
-    const password = useRef()
+    
+    const { register, watch, errors, handleSubmit } = useForm({mode:'onChange'}) // useForm에서 메소드 꺼냄
+    const [errorFromSubmit, setErrorFromSubmit] = useState('')
+    const password = useRef() // dom 선택과 focus 선택
+
     password.current = watch("password")
 
-    // 'name:email'을 관찰 : 바뀔때마다 console
-    console.log(watch("email"))
+    const onSubmit = async (data) => {
+        try{
+            let createUser = await firebase.auth().createUserWithEmailAndPassword(data.email, data.password)
+            console.log('createUser',createUser)
+        } catch(error) {
+            setErrorFromSubmit(error.message)
+            setTimeout(() => {
+                setErrorFromSubmit('')
+            }, 5000)
+        }
+    }
 
     return (
         <div className="auth_wrapper">
             <div className="auth_title">
                 <h3>Register</h3>
             </div>
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <label>Email</label>
                 <input
                     name="email"
@@ -56,6 +68,9 @@ function RegisterPage() {
                 />
                 {errors.password_confirm && errors.password_confirm.type==="required" && <p>This password confirm field is required</p>}
                 {errors.password_confirm && errors.password_confirm.type==="validate" && <p>This password do not match</p>}
+
+                {/* firebase 가입 오류 state가 있을 시 */}
+                {errorFromSubmit && <p>{errorFromSubmit}</p>}
                 <input type="submit" />
                 <Link style={{color: '#adadad', textDecoration: 'none'}} to="Login">이미 아이디가 있다면...</Link>
             </form>

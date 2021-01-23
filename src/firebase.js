@@ -18,3 +18,5 @@ var firebaseConfig = {
 // 프로젝트 이름, storage, 도메인.. 전부 사용
 firebase.initializeApp(firebaseConfig);
 // firebase.analytics(); 통계 보여줌
+
+export default firebase

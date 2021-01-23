@@ -4,35 +4,46 @@ body {
         'Helvetica Neue', sans-serif;
 }
 
-form {
-    max-width: 500px;
+.auth_wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: center;
+}
+
+.auth_title h3 {
+    text-align: center;
+}
+
+.auth_wrapper form {
+    width: 375px;
     margin: 0 auto;
 }
 
-h1 {
+.auth_wrapper h1 {
     font-weight: 100;
-    color: white;
+    color: #222;
     text-align: center;
     padding-bottom: 10px;
     border-bottom: 1px solid rgb(79, 98, 148);
 }
 
-.form {
+.auth_wrapper .form {
     background: #0e101c;
     max-width: 400px;
     margin: 0 auto;
 }
 
-p {
+.auth_wrapper p {
     color: #bf1650;
 }
 
-p::before {
+.auth_wrapper p::before {
     display: inline;
     content: '⚠ ';
 }
 
-input {
+.auth_wrapper input {
     display: block;
     box-sizing: border-box;
     width: 100%;
@@ -43,19 +54,18 @@ input {
     font-size: 14px;
 }
 
-label {
+.auth_wrapper label {
     line-height: 2;
     text-align: left;
     display: block;
-    margin-bottom: 13px;
-    margin-top: 20px;
-    color: white;
+    margin: 5px 0;
+    color: #222;
     font-size: 14px;
     font-weight: 200;
 }
 
-button[type='submit'],
-input[type='submit'] {
+.auth_wrapper button[type='submit'],
+.auth_wrapper input[type='submit'] {
     background: #ec5990;
     color: white;
     text-transform: uppercase;
@@ -67,37 +77,32 @@ input[type='submit'] {
     letter-spacing: 10px;
 }
 
-button[type='submit']:hover,
-input[type='submit']:hover {
+.auth_wrapper button[type='submit']:hover,
+.auth_wrapper input[type='submit']:hover {
     background: #bf1650;
 }
 
-button[type='submit']:active,
-input[type='button']:active,
-input[type='submit']:active {
+.auth_wrapper button[type='submit']:active,
+.auth_wrapper input[type='button']:active,
+.auth_wrapper input[type='submit']:active {
     transition: 0.3s all;
     transform: translateY(3px);
     border: 1px solid transparent;
     opacity: 0.8;
 }
 
-input:disabled {
+.auth_wrapper input:disabled {
     opacity: 0.4;
 }
 
-input[type='button']:hover {
+.auth_wrapper input[type='button']:hover {
     transition: 0.3s all;
 }
 
-button[type='submit'],
-input[type='button'],
-input[type='submit'] {
+.auth_wrapper button[type='submit'],
+.auth_wrapper input[type='button'],
+.auth_wrapper input[type='submit'] {
     -webkit-appearance: none;
-}
-
-.App {
-    max-width: 600px;
-    margin: 0 auto;
 }
 
 button[type='button'] {
@@ -124,4 +129,9 @@ button {
     text-transform: uppercase;
     padding: 10px 20px;
     border-radius: 4px;
+}
+
+.link_login {
+    color: #adadad;
+    text-decoration: none;
 }

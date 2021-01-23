@@ -5,12 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import { Provider } from 'react-redux'
-import { createStore, applyMiddleware } from 'reudx'
+import { createStore, applyMiddleware } from 'redux'
 import promiseMiddleware from 'redux-promise'
 import ReduxThunk from 'redux-thunk'
-
 // reducer
 import Reducer from './Redux/reducer'
+
+// The following line can be included in your src/index.js or App.js file
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 // middle ware
 // 리덕스는 원래 객체만 받을 수 있지만, 함수와 프로미스도 받을 수 있도록

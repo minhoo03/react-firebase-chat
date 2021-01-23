@@ -8,16 +8,20 @@ function RegisterPage() {
     
     const { register, watch, errors, handleSubmit } = useForm({mode:'onChange'}) // useForm에서 메소드 꺼냄
     const [errorFromSubmit, setErrorFromSubmit] = useState('')
-    const password = useRef() // dom 선택과 focus 선택
+    const [loading, setLoading] = useState(false)
 
+    const password = useRef() // dom 선택과 focus 선택
     password.current = watch("password")
 
     const onSubmit = async (data) => {
         try{
+            setLoading(true)
             let createUser = await firebase.auth().createUserWithEmailAndPassword(data.email, data.password)
             console.log('createUser',createUser)
+            setLoading(false)
         } catch(error) {
             setErrorFromSubmit(error.message)
+            setLoading(false)
             setTimeout(() => {
                 setErrorFromSubmit('')
             }, 5000)
@@ -71,7 +75,7 @@ function RegisterPage() {
 
                 {/* firebase 가입 오류 state가 있을 시 */}
                 {errorFromSubmit && <p>{errorFromSubmit}</p>}
-                <input type="submit" />
+                <input type="submit" disabled={loading} />
                 <Link style={{color: '#adadad', textDecoration: 'none'}} to="Login">이미 아이디가 있다면...</Link>
             </form>
         </div>

@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import {Link} from 'react-router-dom'
 import {useForm} from 'react-hook-form'
 import firebase from '../../firebase'
+import md5 from 'md5'
 
 function RegisterPage() {
 
@@ -19,6 +20,11 @@ function RegisterPage() {
             let createUser = await firebase.auth().createUserWithEmailAndPassword(data.email, data.password)
             console.log('createUser',createUser)
             setLoading(false)
+
+            await createUser.user.updateProfile({
+                displayName: data.name,
+                photoURL: `http://gravatar.com/avatar/${md5(createUser.user.email)}?d=identicon`
+            })
         } catch(error) {
             setErrorFromSubmit(error.message)
             setLoading(false)

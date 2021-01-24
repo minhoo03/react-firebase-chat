@@ -19,8 +19,7 @@ function RegisterPage() {
             setLoading(true)
             let createUser = await firebase.auth().createUserWithEmailAndPassword(data.email, data.password)
             console.log('createUser',createUser)
-            setLoading(false)
-
+            
             await createUser.user.updateProfile({
                 displayName: data.name,
                 photoURL: `http://gravatar.com/avatar/${md5(createUser.user.email)}?d=identicon`
@@ -31,6 +30,8 @@ function RegisterPage() {
                 name: createUser.user.displayName,
                 image: createUser.user.photoURL
             })
+            
+            setLoading(false)
         } catch(error) {
             setErrorFromSubmit(error.message)
             setLoading(false)

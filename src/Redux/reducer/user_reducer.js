@@ -3,7 +3,7 @@ import {
 } from '../actions/types'
 
 const initialUserState = {
-    currentUser: null, // 이 property에 유저 정보에 담을 것
+    currentUser: null, // 이 property에 유저 정보(user)에 담을 것
     isLoading: true
 }
 

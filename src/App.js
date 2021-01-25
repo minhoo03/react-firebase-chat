@@ -12,7 +12,7 @@ import RegisterPage from './components/RegisterPage/RegisterPage'
 import firebase from './firebase'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { setUser } from './Redux/actions/user_action'
+import { setUser,clearUser } from './Redux/actions/user_action'
 
 function App(props) {
 
@@ -31,6 +31,7 @@ const isLoading = useSelector(state => state.user.isLoading) // redux state 사�
       } else {
         // 로그인 X
         history.push('/login')
+        dispatch(clearUser())
       }
     })
   }, [])

@@ -1,4 +1,5 @@
 import React from 'react'
+import firebase from '../../../firebase'
 import { IoMdChatbubbles } from 'react-icons/io'
 import Dropdown from 'react-bootstrap/Dropdown'
 import Image from 'react-bootstrap/Image'
@@ -8,6 +9,10 @@ import { useSelector } from 'react-redux'
 function UserPanel() {
     // Redux store의 state 받아옴
     const user = useSelector(state => state.user.currentUser)
+
+    const handleLogout = () => {
+        firebase.auth().signOut()
+    }
 
     return (
         <div>
@@ -29,7 +34,7 @@ function UserPanel() {
 
                     <Dropdown.Menu>
                         <Dropdown.Item href="#/action-1">프로필 사진 변경</Dropdown.Item>
-                        <Dropdown.Item href="#/action-2">로그아웃</Dropdown.Item>
+                        <Dropdown.Item onClick={handleLogout}>로그아웃</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
             </div>

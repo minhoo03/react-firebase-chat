@@ -29,7 +29,7 @@ const isLoading = useSelector(state => state.user.isLoading) // redux state 사�
         history.push('/')
         dispatch(setUser(user)) // redux dispatch... 로그인 인증된 user -> dispatch
       } else {
-        // 로그인 X
+        // 로그인 X && 로그아웃 -> redux state 제거
         history.push('/login')
         dispatch(clearUser())
       }

@@ -20,6 +20,7 @@ export default function(state = initialUserState, action ) {
 
         case CLEAR_USER:
             return {
+                // 객체 형식, action.type을 확인해보고 clear_user일시 state = null
                 ...state,
                 currentUser: null,
                 isLoading: false

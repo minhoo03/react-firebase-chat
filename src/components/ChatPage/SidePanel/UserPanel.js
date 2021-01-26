@@ -20,8 +20,21 @@ function UserPanel() {
         inputOpenImageRef.current.click()
     }
 
-    const handleUploadImage = () => {
-        
+    const handleUploadImage = async (e) => {
+        const file = e.target.files[0]
+
+        const metadata = { contentType: file.metadata }
+
+        try {
+            // 스토리지에 파일 저장
+            // firebase.storage() 사용 .ref(테이블).child(로우:파일명).put({컬럼: file과 file 타입})
+            let uploadTaskSnapshot = await firebase.storage().ref()
+            .child(`user_image/${user.uid}`).put(file, metadata)
+
+            console.log('uploadTaskSnapshot',uploadTaskSnapshot)
+        } catch (error) {
+            
+        }
     }
 
     return (

@@ -4,12 +4,13 @@ import { IoMdChatbubbles } from 'react-icons/io'
 import Dropdown from 'react-bootstrap/Dropdown'
 import Image from 'react-bootstrap/Image'
 
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { setPhotoURL } from '../../../Redux/actions/user_action'
 
 function UserPanel() {
     // Redux store의 state 받아옴
     const user = useSelector(state => state.user.currentUser)
-
+    const dispatch = useDispatch() 
     const inputOpenImageRef = useRef()
 
     const handleLogout = () => {
@@ -26,14 +27,25 @@ function UserPanel() {
         const metadata = { contentType: file.metadata }
 
         try {
-            // 스토리지에 파일 저장
-            // firebase.storage() 사용 .ref(테이블).child(로우:파일명).put({컬럼: file과 file 타입})
+            // *스토리지에 파일 저장     // firebase.storage() 사용 .ref(테이블).child(로우:파일명).put({컬럼: file과 file 타입})
             let uploadTaskSnapshot = await firebase.storage().ref()
             .child(`user_image/${user.uid}`).put(file, metadata)
 
-            console.log('uploadTaskSnapshot',uploadTaskSnapshot)
+            let downloadURL = await uploadTaskSnapshot.ref.getDownloadURL()
+
+            // *auth: user > currenUser 프로필 이미지 수정
+            await firebase.auth().currentUser.updateProfile({
+                photoURL: downloadURL
+            })
+            // *Redux state의 프로필 이미지 수정
+            dispatch(setPhotoURL(downloadURL))
+
+            // *DB 유저 이미지 수정
+            await firebase.database().ref('users')
+            .child(user.uid)
+            .update({ image: downloadURL })
         } catch (error) {
-            
+            alert(error)
         }
     }
 

@@ -1,6 +1,7 @@
 import {
     SET_USER,
-    CLEAR_USER
+    CLEAR_USER,
+    SET_PHOTOURL
 } from '../actions/types'
 
 const initialUserState = {
@@ -23,6 +24,14 @@ export default function(state = initialUserState, action ) {
                 // 객체 형식, action.type을 확인해보고 clear_user일시 state = null
                 ...state,
                 currentUser: null,
+                isLoading: false
+            }
+
+            // action.payload = photoURL
+        case SET_PHOTOURL:
+            return {
+                ...state,
+                currentUser: {...state.currentUser, photoURL: action.payload},
                 isLoading: false
             }
         default:

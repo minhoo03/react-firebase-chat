@@ -88,6 +88,7 @@ function RegisterPage() {
 
                 {/* firebase 가입 오류 state가 있을 시 */}
                 {errorFromSubmit && <p>{errorFromSubmit}</p>}
+                {/* submit -> loading -> end submit -> end loading */}
                 <input type="submit" disabled={loading} />
                 <Link style={{color: '#adadad', textDecoration: 'none'}} to="Login">이미 아이디가 있다면...</Link>
             </form>

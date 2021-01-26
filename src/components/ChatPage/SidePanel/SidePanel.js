@@ -1,5 +1,5 @@
 import React from 'react'
-import ChatRoom from './ChatRoom'
+import ChatRooms from './ChatRooms'
 import FavoritePanel from './FavoritePanel'
 import DirectMessages from './DirectMessages'
 import UserPanel from './UserPanel'
@@ -16,7 +16,7 @@ function SidePanel() {
         >
         <UserPanel />
         <FavoritePanel /> 
-        <ChatRoom />
+        <ChatRooms />
         <DirectMessages />   
         </div>
     )

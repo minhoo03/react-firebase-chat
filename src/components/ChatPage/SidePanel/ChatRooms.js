@@ -9,14 +9,34 @@ import Form from 'react-bootstrap/Form'
 import { connect } from 'react-redux'
 import firebase from '../../../firebase'
 
+import { setCurrentChatRoom } from '../../../Redux/actions/chatRoom_action'
+
 export class ChatRooms extends Component {
     // const [show, setShow] = useState(false);
     state = {
         show: false,
         name: "",
         description: "",
-        chatRoomsRef: firebase.database().ref("chatRooms")
+        chatRoomsRef: firebase.database().ref("chatRooms"),
+        chatRooms: []
     } 
+
+    // useEffect
+    componentDidMount() {
+        this.AddChatRoomsListeners()
+    }
+
+    // chatroom 데이터 실시간 받기
+    AddChatRoomsListeners = () => {
+        let chatRoomsArray = []
+
+        // .on : DB에 child가 추가되는지 실시간 확인 중
+        this.state.chatRoomsRef.on("child_added", DataSnapshot => {
+            chatRoomsArray.push(DataSnapshot.val())
+            console.log('chatRoomsArray',chatRoomsArray)
+            this.setState({chatRooms: chatRoomsArray}) // 확인된 DB child를 setState
+        })
+    }
 
     // const handleClose = () => setShow(false);
     handleClose = () => this.setState({show: false})
@@ -24,6 +44,23 @@ export class ChatRooms extends Component {
 
     // 유효성 체크 (state 있는지 확인)
     isFormVaild = (name, description) => name && description 
+
+    // room 정보를 redux에 넣기
+    changeChatRoom = (room) => {
+        this.props.dispatch(setCurrentChatRoom(room))
+    }
+
+    // state: chatroom에 값이 있을 경우 map을 이용해 렌더링
+    renderChatRooms = (chatRooms) => 
+        chatRooms.length > 0 && chatRooms.map(room => (
+            <li 
+                key={room.id}
+                onClick={() => this.changeChatRoom(room)}
+            >
+                # {room.name}
+            </li>
+        ))
+    
 
     // form submit
     handleSubmit = (e) => {
@@ -76,6 +113,11 @@ export class ChatRooms extends Component {
                         position: 'absolute', right:0, cursor: 'pointer'
                     }} onClick={this.handleShow} />
                 </div>
+
+                {/* chatRooms state를 렌더링한 li 감싸개 */}
+                <ul style={{listStyleType:'none', padding: 0}}>
+                    {this.renderChatRooms(this.state.chatRooms)}
+                </ul>
 
                 {/* ADD CHAT ROOM MODAL */}
                 {/* input이 변경될 때 -> state > name 에 input value를 담아줌 */}

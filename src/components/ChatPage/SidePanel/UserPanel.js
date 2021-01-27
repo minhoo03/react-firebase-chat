@@ -33,14 +33,14 @@ function UserPanel() {
 
             let downloadURL = await uploadTaskSnapshot.ref.getDownloadURL()
 
-            // *auth: user > currenUser 프로필 이미지 수정
+            // *auth: user > currenUser : Auth 서비스 프로필 수정
             await firebase.auth().currentUser.updateProfile({
                 photoURL: downloadURL
             })
-            // *Redux state의 프로필 이미지 수정
+            // *Redux state의 유저 이미지 교체
             dispatch(setPhotoURL(downloadURL))
 
-            // *DB 유저 이미지 수정
+            // *DB 유저 이미지 교체
             await firebase.database().ref('users')
             .child(user.uid)
             .update({ image: downloadURL })

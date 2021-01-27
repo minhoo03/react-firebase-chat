@@ -18,12 +18,26 @@ export class ChatRooms extends Component {
         name: "",
         description: "",
         chatRoomsRef: firebase.database().ref("chatRooms"),
-        chatRooms: []
+        chatRooms: [],
+        firstLoad: true,
+        activeChatRoomId: ""
     } 
 
     // useEffect
     componentDidMount() {
         this.AddChatRoomsListeners()
+    }
+
+    // 임의로 첫 번째 ROOM이 redux에 들어가지게
+    setFirstChatRoom = () => {
+        const firstChatRoom = this.state.chatRooms[0]
+
+        if(this.state.firstLoad && this.state.chatRooms.length > 0) {
+            this.props.dispatch(setCurrentChatRoom(firstChatRoom))
+            this.setState({activeChatRoomId: firstChatRoom.id})
+        }
+        // 처음 로드했을때만 첫 번째 ROOM이 선택되어야 하므로
+        this.setState({firstChatRoom: false})
     }
 
     // chatroom 데이터 실시간 받기
@@ -34,7 +48,7 @@ export class ChatRooms extends Component {
         this.state.chatRoomsRef.on("child_added", DataSnapshot => {
             chatRoomsArray.push(DataSnapshot.val())
             console.log('chatRoomsArray',chatRoomsArray)
-            this.setState({chatRooms: chatRoomsArray}) // 확인된 DB child를 setState
+            this.setState({chatRooms: chatRoomsArray}, () => this.setFirstChatRoom()) // 확인된 DB child를 setState
         })
     }
 
@@ -48,6 +62,7 @@ export class ChatRooms extends Component {
     // room 정보를 redux에 넣기
     changeChatRoom = (room) => {
         this.props.dispatch(setCurrentChatRoom(room))
+        this.setState({activeChatRoomId: room.id})
     }
 
     // state: chatroom에 값이 있을 경우 map을 이용해 렌더링
@@ -55,7 +70,8 @@ export class ChatRooms extends Component {
         chatRooms.length > 0 && chatRooms.map(room => (
             <li 
                 key={room.id}
-                onClick={() => this.changeChatRoom(room)}
+                style={{backgroundColor: room.id === this.state.activeChatRoomId && "#ffffff45"}}
+                onClick={() => this.changeChatRoom(room)} // li 클릭시 redux 저장
             >
                 # {room.name}
             </li>

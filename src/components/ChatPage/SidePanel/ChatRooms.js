@@ -1,3 +1,5 @@
+// create ChatRoom && select ChatRoom
+
 import React, { Component } from 'react'
 import { AiOutlineSmile } from 'react-icons/ai'
 import { AiOutlinePlus } from 'react-icons/ai'
@@ -26,6 +28,11 @@ export class ChatRooms extends Component {
     // useEffect
     componentDidMount() {
         this.AddChatRoomsListeners()
+    }
+
+    // AddChat...Listeners의 eventListener "child_added"를 종료
+    componentWillUnmount() {
+        this.state.chatRooms.off()
     }
 
     // 임의로 첫 번째 ROOM이 redux에 들어가지게

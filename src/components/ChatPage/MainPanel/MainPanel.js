@@ -11,7 +11,7 @@ export class MainPanel extends Component {
 
                 <div style={{
                     width:'100%',
-                    height:'450px',
+                    height:'40vh',
                     border:'.1rem solid #ececec',
                     borderRadius:'4px',
                     padding:'1rem',

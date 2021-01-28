@@ -79,7 +79,7 @@ body {
 
 .auth_wrapper button[type='submit']:hover,
 .auth_wrapper input[type='submit']:hover {
-    background: #727ae6;
+    background: #6770e4;
 }
 
 .auth_wrapper button[type='submit']:active,
@@ -154,5 +154,5 @@ button {
 }
 
 .msgForm-button:hover {
-    background: #727ae6;
+    background: #6770e4;
 }

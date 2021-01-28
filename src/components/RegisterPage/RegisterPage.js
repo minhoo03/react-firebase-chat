@@ -18,6 +18,7 @@ function RegisterPage() {
         try{
             setLoading(true)
             let createUser = await firebase.auth().createUserWithEmailAndPassword(data.email, data.password)
+            firebase.auth().signOut()
             console.log('createUser',createUser)
             
             await createUser.user.updateProfile({

@@ -9,7 +9,7 @@ import firebase from '../../../firebase'
 export class MainPanel extends Component {
 
     state = {
-        messages: [],
+        messages: [], // 보낸 이의 chat, user, chatRoom 정보
         messageRef: firebase.database().ref("messages"),
         messagesLoading: true
     }
@@ -32,19 +32,19 @@ export class MainPanel extends Component {
                 messagesLoading: false
             })
         })  
+        // console.log('messagesArr',messagesArr)
     }
 
     // msg state를 Message component에 전달
-    renderMessages = (messages) => {
+    renderMessages = (messages) =>
         messages.length > 0 &&
-        messages.map(msg => (
+        messages.map(message => (
             <Message
-                key={msg.timestamp}
-                message={msg}
+                key={message.timestamp}
+                message={message}
                 user={this.props.user}
             />
-        ))
-    }
+    ))
 
     render() {
         const{ messages } = this.state
@@ -62,9 +62,9 @@ export class MainPanel extends Component {
                     marginBottom:'1rem',
                     overflowY:'auto'
                 }}>
-                    {/* msg 렌더링 */}
                     {this.renderMessages(messages)}
                 </div>
+
                 <MessageForm />
             </div>
         )

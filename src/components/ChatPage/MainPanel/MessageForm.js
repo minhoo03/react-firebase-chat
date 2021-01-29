@@ -13,6 +13,23 @@ function MessageForm() {
     const [ loading, setLoading ] = useState(false)
     const messageRef = firebase.database().ref("messages")
 
+    const createMessage = (fileURL = null) => {
+        const message = {
+            timestamp: firebase.database.ServerValue.TIMESTAMP,
+            user: {
+                id: user.uid,
+                name: user.displayName,
+                image: user.photoURL
+            }
+        }
+        if(fileURL !== null) {
+            message["image"] = fileURL
+        } else {
+            message["content"] = content
+        }
+        return message
+    }
+
     const handleChange = (event) => {
         setContent(event.target.value)
     }
@@ -36,23 +53,6 @@ function MessageForm() {
                     setErrors([])
             }, 5000);
         }
-    }
-
-    const createMessage = (fileURL = null) => {
-        const message = {
-            timestamp: firebase.database.ServerValue.TIMESTAMP,
-            user: {
-                id: user.uid,
-                name: user.displayName,
-                image: user.photoURL
-            }
-        }
-        if(fileURL !== null) {
-            message["image"] = fileURL
-        } else {
-            message["content"] = content
-        }
-        return message
     }
 
     return (

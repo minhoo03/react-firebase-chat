@@ -19,6 +19,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 // middle ware
 // 리덕스는 원래 객체만 받을 수 있지만, 함수와 프로미스도 받을 수 있도록
+// ↑를 거친 값을 return 후 store를 생성해준다
 const createStoreWithMiddleware = applyMiddleware(promiseMiddleware, ReduxThunk)(createStore)
 
 ReactDOM.render(

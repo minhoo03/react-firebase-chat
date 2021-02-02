@@ -1,3 +1,5 @@
+// 메인 페이지
+
 import React from 'react'
 import SidePanel from './SidePanel/SidePanel'
 import MainPanel from './MainPanel/MainPanel'

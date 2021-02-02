@@ -54,7 +54,7 @@ export class ChatRooms extends Component {
         // .on : DB에 child가 추가되는지 실시간 확인 중
         this.state.chatRoomsRef.on("child_added", DataSnapshot => {
             chatRoomsArray.push(DataSnapshot.val())
-            console.log('chatRoomsArray',chatRoomsArray)
+            // console.log('chatRoomsArray',chatRoomsArray)
             this.setState({chatRooms: chatRoomsArray}, () => this.setFirstChatRoom()) // 확인된 DB child를 setState
         })
     }

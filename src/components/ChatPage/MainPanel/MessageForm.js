@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+// textArea, send, upload
+
+import React, { useRef, useState } from 'react'
 import firebase from '../../../firebase'
 import { useSelector } from 'react-redux'
 
@@ -7,11 +9,14 @@ import { Form, ProgressBar, Row, Col, Button } from 'react-bootstrap'
 function MessageForm() {
     const chatRoom = useSelector(state => state.chatRoom.currentChatRoom)
     const user = useSelector(state => state.user.currentUser)
-
+    // message send
     const [ content, setContent ] = useState("")
     const [ errors, setErrors ] = useState([])
     const [ loading, setLoading ] = useState(false)
     const messageRef = firebase.database().ref("messages")
+    // image upload
+    const inputOpenImageRef = useRef()
+    const storageRef = firebase.storage().ref()
 
     const createMessage = (fileURL = null) => {
         const message = {
@@ -34,6 +39,7 @@ function MessageForm() {
         setContent(event.target.value)
     }
 
+    // send text
     const handleSubmit = async () => {
         if(!content) {
             setErrors(prev => prev.concat("문구를 적어주세요!")) // 원래 error에 ++
@@ -55,6 +61,25 @@ function MessageForm() {
         }
     }
 
+    // open file input
+    const handelOpenImageRef = () => {
+        inputOpenImageRef.current.click()
+    }
+    // storage에 image 전송
+    const handleUploadImage = async (e) => {
+        const file = e.target.files[0]
+        if(!file) return
+        const filePath = `/meesage/public/${file.name}`
+        const metadata = { contentType:file.metadata }
+
+        // storage 전송
+        try {
+            await storageRef.child(filePath).put(file,metadata)
+        } catch (error) {
+            alert(error)
+        }
+    }
+
     return (
         <div>
             <Form onSubmit={handleSubmit}>
@@ -70,13 +95,14 @@ function MessageForm() {
 
             <Row>
                 <Col>
-                    <button className="msgForm-button">Upload</button>
+                    <button className="msgForm-button" onClick={handelOpenImageRef}>Upload</button>
                 </Col>
 
                 <Col>
                     <button className="msgForm-button" onClick={handleSubmit}>Send</button>
                 </Col>
             </Row>
+            <input type="file" style={{ display: 'none' }} ref={inputOpenImageRef} onChange={handleUploadImage} />
         </div>
     )
 }

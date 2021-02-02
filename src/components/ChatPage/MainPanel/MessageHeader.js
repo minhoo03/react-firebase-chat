@@ -1,3 +1,5 @@
+// 채팅방 정보
+
 import React from 'react'
 
 import { Container, Row, Col } from 'react-bootstrap'

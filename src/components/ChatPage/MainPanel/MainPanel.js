@@ -1,3 +1,5 @@
+// 현재 선택된 채팅방 구분 && DB에 저장된 채팅방의 채팅을 Message 컴포넌트에 전달
+
 import React, { Component } from 'react'
 import MessageHeader from './MessageHeader'
 import Message from './Message'

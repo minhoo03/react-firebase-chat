@@ -1,3 +1,5 @@
+// Props로 받은 ChatRoom의 Chatting을 꾸며줌
+
 import React from 'react'
 import Media from 'react-bootstrap/Media';
 import moment from 'moment';

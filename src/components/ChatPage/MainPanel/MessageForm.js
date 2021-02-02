@@ -20,6 +20,7 @@ function MessageForm() {
     const inputOpenImageRef = useRef()
     const storageRef = firebase.storage().ref()
 
+    // 메세지 객체 생성
     const createMessage = (fileURL = null) => {
         const message = {
             timestamp: firebase.database.ServerValue.TIMESTAMP,
@@ -75,18 +76,34 @@ function MessageForm() {
         const metadata = { contentType:file.metadata }
 
         // storage 전송
+        setLoading(true) // 메세지 전송 못하게
         try {
             let uploadTask = storageRef.child(filePath).put(file,metadata)
 
             // percent
-            uploadTask.on("state_changed",
-            UploadTaskSnapshot => {
-                const percentage = Math.round(
-                    // 진행된 Byte / 전체 Byte
-                    (UploadTaskSnapshot.bytesTransferred / UploadTaskSnapshot.totalBytes) * 100
-                )
-                setPercentage(percentage)
-            })
+            uploadTask.on(
+                "state_changed",
+                UploadTaskSnapshot => {
+                    const percentage = Math.round(
+                        // 진행된 Byte / 전체 Byte
+                        (UploadTaskSnapshot.bytesTransferred / UploadTaskSnapshot.totalBytes) * 100
+                    )
+                    setPercentage(percentage)
+                }, 
+                err => {
+                    console.log(err)
+                    setLoading(false)
+                },
+                () => {
+                    // upload 완료 후 메시지 전송 (DB에 저장)
+                    // 저장된 파일 URL
+                    uploadTask.snapshot.ref.getDownloadURL()
+                    .then(downloadURL => {
+                        messageRef.child(chatRoom.id).push().set(createMessage(downloadURL))
+                        setLoading(false)
+                    })
+                }
+            )
         } catch (error) {
             alert(error)
         }
@@ -109,11 +126,11 @@ function MessageForm() {
 
             <Row>
                 <Col>
-                    <button className="msgForm-button" onClick={handelOpenImageRef}>Upload</button>
+                    <button className="msgForm-button" disabled={loading ? true: false} accept="image/jpeg, image/png" onClick={handelOpenImageRef}>Upload</button>
                 </Col>
 
                 <Col>
-                    <button className="msgForm-button" onClick={handleSubmit}>Send</button>
+                    <button className="msgForm-button" disabled={loading ? true: false} onClick={handleSubmit}>Send</button>
                 </Col>
             </Row>
             <input type="file" style={{ display: 'none' }} ref={inputOpenImageRef} onChange={handleUploadImage} />

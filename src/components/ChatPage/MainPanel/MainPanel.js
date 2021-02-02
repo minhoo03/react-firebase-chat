@@ -13,7 +13,32 @@ export class MainPanel extends Component {
     state = {
         messages: [], // 보낸 이의 chat, user, chatRoom 정보
         messageRef: firebase.database().ref("messages"),
-        messagesLoading: true
+        messagesLoading: true,
+        searchTerm: "", // search input
+        searchResults: [],
+        seatchLoading: false
+    }
+
+    handleSearchChange = e => {
+        this.setState({
+            searchTerm: e.target.value,
+            searchLoading: true
+        }, () => this.handleSearchMessages())
+    }
+
+    handleSearchMessages = () => {
+        const chatRoomMessages = [...this.state.messages]
+        const regex = new RegExp(this.state.searchTerm, "gi")
+        const searchResults = chatRoomMessages.reduce((acc, message) => { // message가 있는 배열에 reduce
+            if(
+                (message.content && message.content.match(regex)) || // message Text가 있을 때, 정규식(input)과 일치하는 것 있나 확인
+                message.user.name.match(regex)
+            ) {
+                acc.push(message)
+            }
+            return acc
+        }, [])
+        this.setState({searchResults})
     }
 
     // 각 방의 채팅 구분
@@ -49,11 +74,11 @@ export class MainPanel extends Component {
     ))
 
     render() {
-        const{ messages } = this.state
+        const{ messages, searchResults, searchTerm } = this.state
 
         return (
             <div style={{padding: '2rem 2rem 0 2rem'}}>
-                <MessageHeader />
+                <MessageHeader handleSearchChange={this.handleSearchChange} />
 
                 <div style={{
                     width:'100%',
@@ -64,7 +89,11 @@ export class MainPanel extends Component {
                     marginBottom:'1rem',
                     overflowY:'auto'
                 }}>
-                    {this.renderMessages(messages)}
+                    {searchTerm ?
+                        this.renderMessages(searchResults)
+                        :
+                        this.renderMessages(messages)
+                    }
                 </div>
 
                 <MessageForm />

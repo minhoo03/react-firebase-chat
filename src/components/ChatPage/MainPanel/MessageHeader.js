@@ -12,7 +12,7 @@ import Button from 'react-bootstrap/Button'
 import { BsFillUnlockFill } from 'react-icons/bs'
 import { AiOutlineHeart,AiFillHeart, AiOutlineSearch } from 'react-icons/ai'
 
-function MessageHeader() {
+function MessageHeader({handleSearchChange}) {
 
     const buttonStyle = {
         outline: 'none',
@@ -39,6 +39,7 @@ function MessageHeader() {
                                 <InputGroup.Text id="basic-addon1"><AiOutlineSearch /></InputGroup.Text>
                             </InputGroup.Prepend>
                             <FormControl
+                                onChange={handleSearchChange}
                                 placeholder="Search Messages"
                                 aria-label="Search"
                                 aria-describedby="basic-addon1"

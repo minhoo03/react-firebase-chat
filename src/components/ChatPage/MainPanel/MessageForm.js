@@ -9,6 +9,8 @@ import { Form, ProgressBar, Row, Col, Button } from 'react-bootstrap'
 function MessageForm() {
     const chatRoom = useSelector(state => state.chatRoom.currentChatRoom)
     const user = useSelector(state => state.user.currentUser)
+
+    const isPrivateTrueAndFalse = useSelector(state => state.chatRoom.isPrivateTrueAndFalse)
     // message send
     const [ content, setContent ] = useState("")
     const [ errors, setErrors ] = useState([])
@@ -68,11 +70,20 @@ function MessageForm() {
     const handelOpenImageRef = () => {
         inputOpenImageRef.current.click()
     }
+
+    const getPath = () => {
+        if(isPrivateTrueAndFalse) {
+            return `/message/private/${chatRoom.id}` // 내 아이디/상대 아이디 or 상대 아이디/ 내 아이디
+        } else {
+            return '/message/public'
+        }
+    }
+
     // storage에 image 전송
     const handleUploadImage = (e) => {
         const file = e.target.files[0]
         if(!file) return
-        const filePath = `/meesage/public/${file.name}`
+        const filePath = `${getPath()}/${file.name}`
         const metadata = { contentType:file.metadata }
 
         // storage 전송

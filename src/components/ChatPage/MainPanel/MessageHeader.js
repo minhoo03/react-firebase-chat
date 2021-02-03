@@ -7,12 +7,16 @@ import { InputGroup, FormControl } from 'react-bootstrap'
 import { Accordion, Card } from 'react-bootstrap'
 
 import Image from 'react-bootstrap/Image'
-import Button from 'react-bootstrap/Button'
 
-import { BsFillUnlockFill } from 'react-icons/bs'
+import { BsFillUnlockFill,BsFillLockFill } from 'react-icons/bs'
 import { AiOutlineHeart,AiFillHeart, AiOutlineSearch } from 'react-icons/ai'
 
+import { useSelector } from 'react-redux'
+
 function MessageHeader({handleSearchChange}) {
+
+    const chatRoom = useSelector(state => state.chatRoom.currentChatRoom)
+    const isPrivateTrueAndFalse = useSelector(state => state.chatRoom.isPrivateTrueAndFalse)
 
     const buttonStyle = {
         outline: 'none',
@@ -32,7 +36,16 @@ function MessageHeader({handleSearchChange}) {
         >
             <Container>
                 <Row>
-                    <Col><h2><BsFillUnlockFill />{" "}<AiOutlineHeart />{" "}ChatRoom Name</h2></Col>
+                    <Col><h2>
+                    {
+                        isPrivateTrueAndFalse ?
+                            <BsFillLockFill style={{marginBottom:'10px'}} />
+                            :
+                            <BsFillUnlockFill style={{marginBottom:'10px'}} />
+                    }
+                    {" "}<AiOutlineHeart style={{marginBottom:'5px'}} />
+                    {" "}{chatRoom && chatRoom.name}</h2>
+                    </Col>
                     <Col>
                         <InputGroup className="mb-3">
                             <InputGroup.Prepend>

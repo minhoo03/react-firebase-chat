@@ -11,7 +11,7 @@ import Form from 'react-bootstrap/Form'
 import { connect } from 'react-redux'
 import firebase from '../../../firebase'
 
-import { setCurrentChatRoom } from '../../../Redux/actions/chatRoom_action'
+import { setCurrentChatRoom, setPrivateChatRoom } from '../../../Redux/actions/chatRoom_action'
 
 export class ChatRooms extends Component {
     // const [show, setShow] = useState(false);
@@ -69,6 +69,7 @@ export class ChatRooms extends Component {
     // room 정보를 redux에 넣기
     changeChatRoom = (room) => {
         this.props.dispatch(setCurrentChatRoom(room))
+        this.props.dispatch(setPrivateChatRoom(false))
         this.setState({activeChatRoomId: room.id})
     }
 

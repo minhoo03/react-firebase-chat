@@ -2,12 +2,14 @@ import React, { Component } from 'react'
 import firebase from '../../../firebase'
 import { AiOutlineSmile } from 'react-icons/ai'
 import { connect } from 'react-redux'
+import { setCurrentChatRoom, setPrivateChatRoom } from '../../../Redux/actions/chatRoom_action'
 
 export class DirectMessages extends Component {
 
     state = {
         usersRef: firebase.database().ref("users"),
-        users:[]
+        users:[],
+        activeChatRoom:""
     }
 
     componentDidMount() {
@@ -35,13 +37,28 @@ export class DirectMessages extends Component {
     renderDirectMessages = users => 
         users.length > 0 &&
         users.map(user => 
-            <li key={user.uid} onClick={() => this.changeChatRoom(user)}>
+            <li key={user.uid} onClick={() => this.changeChatRoom(user)}
+                style={{
+                    backgroundColor: user.uid === this.state.activeChatRoom && "#ffffff45"
+                }}
+            >
                 #{" "}{user.name}
             </li>
         )
 
     changeChatRoom = (user) => {
         const chatRoomId = this.getChatRoomId(user.uid) // 선택된 유저
+        const chatRoomData = {
+            id: chatRoomId,
+            name: user.name
+        }
+        this.props.dispatch(setCurrentChatRoom(chatRoomData)) // 현재 chatRoomData를 리덕스에 보냄
+        this.props.dispatch(setPrivateChatRoom(true))
+        this.setActiveChatRoom(user.uid)
+    }
+
+    setActiveChatRoom = (userId) => {
+        this.setState({activeChatRoom: userId})
     }
 
     getChatRoomId = (userId) => {

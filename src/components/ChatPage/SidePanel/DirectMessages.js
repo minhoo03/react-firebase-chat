@@ -6,7 +6,8 @@ import { connect } from 'react-redux'
 export class DirectMessages extends Component {
 
     state = {
-        usersRef: firebase.database().ref("users")
+        usersRef: firebase.database().ref("users"),
+        users:[]
     }
 
     componentDidMount() {
@@ -30,11 +31,31 @@ export class DirectMessages extends Component {
         })
     }
 
-    renderDirectMessages = () => {
+    // renderDirectMessages = users => { return users.length > 0 && users.map(user => <li key={user.uid}>#{" "}{user.name}</li>) }
+    renderDirectMessages = users => 
+        users.length > 0 &&
+        users.map(user => 
+            <li key={user.uid} onClick={() => this.changeChatRoom(user)}>
+                #{" "}{user.name}
+            </li>
+        )
 
+    changeChatRoom = (user) => {
+        const chatRoomId = this.getChatRoomId(user.uid) // 선택된 유저
+    }
+
+    getChatRoomId = (userId) => {
+        const currentUserId = this.props.user.uid // 로그인 된 유저
+
+        return userId > currentUserId ? // 채팅방 Id가 2개가 되지 않도록
+        `${userId}/${currentUserId}`
+        :
+        `${currentUserId}/${userId}`
     }
 
     render() {
+        const { users } = this.state
+        
         console.log('users', this.state.users)
         return (
             <div>
@@ -43,7 +64,7 @@ export class DirectMessages extends Component {
                 </span>
 
                 <ul style={{listStyleType: 'none', padding: 0}}>
-                    {this.renderDirectMessages()}
+                    {this.renderDirectMessages(users)}
                 </ul>
             </div>
         )

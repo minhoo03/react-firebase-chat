@@ -33,6 +33,10 @@ export class ChatRooms extends Component {
         this.AddChatRoomsListeners()
     }
 
+    componentWillUnmount() {
+        this.state.chatRoomsRef.off()
+    }
+
     // const handleClose = () => setShow(false);
     handleClose = () => this.setState({show: false})
     handleShow = () => this.setState({show: true})
@@ -46,11 +50,11 @@ export class ChatRooms extends Component {
             chatRoomsArray.push(DataSnapshot.val())
             // console.log('chatRoomsArray',chatRoomsArray)
             this.setState({chatRooms: chatRoomsArray}, () => this.setFirstChatRoom()) // 확인된 DB child를 setState
-            this.addNotifivationListener(DataSnapshot.key) // chatRoom.id
+            this.addNotificationListener(DataSnapshot.key) // chatRoom.id
         })
     }
 
-    addNotifivationListener = (chatRoomId) => { // child_added에 의해 1~n번째 방까지 전부 Listener 실행
+    addNotificationListener = (chatRoomId) => { // child_added에 의해 1~n번째 방까지 전부 Listener 실행
         this.state.messageRef.child(chatRoomId).on("value", DataSnapshot => {
             if(this.props.chatRoom) {
                 this.handleNotification(
@@ -63,12 +67,25 @@ export class ChatRooms extends Component {
         })
     }
 
+    addNotificationListener = (chatRoomId) => {
+        this.state.messageRef.child(chatRoomId).on("value", DataSnapshot => {
+            if (this.props.chatRoom) {
+                this.handleNotification(
+                    chatRoomId,
+                    this.props.chatRoom.id,
+                    this.state.notifications,
+                    DataSnapshot
+                )
+            }
+        })
+    }
+
     handleNotification = (chatRoomId, currentChatRoomId, notifications, DataSnapshot) => {
 
         let lastTotal = 0
 
         // 이미 notifications state 안에 알림 정보가 들어있는 채팅방과 그렇지 않은 채팅방을 나눠주기 (새로 만든 방)
-        let index = notifications.findIndex(notifivation => notifivation.id === chatRoomId)
+        let index = notifications.findIndex(notification => notification.id === chatRoomId)
         
         // notifications state안에 해당 채팅방 알림 정보가 없을 때
         if(index === -1) {
@@ -93,7 +110,7 @@ export class ChatRooms extends Component {
             // total property에 현재 전체 메시지 개수 넣어주기
             notifications[index].total = DataSnapshot.numChildren()
         }
-        // 목표는 방 하나 하나의 맞는 알림 정보를 notifivations state에 넣어주기
+        // 목표는 방 하나 하나의 맞는 알림 정보를 notifications state에 넣어주기
         this.setState({ notifications })
     }
 
@@ -160,6 +177,24 @@ export class ChatRooms extends Component {
         this.props.dispatch(setCurrentChatRoom(room))
         this.props.dispatch(setPrivateChatRoom(false))
         this.setState({activeChatRoomId: room.id})
+        this.clearNotification()
+    }
+
+    clearNotification = () => {
+        // notifications을 findIndex 매개변수에 담음 => Redux chatRoom.id와 같은 것을 반환
+        let index = this.state.notifications.findIndex(notification =>
+            notification.id === this.props.chatRoom.id
+        )
+
+        if(index !== -1) {
+            // updateNotifications에 notifications을 담고
+            // lastKnownTotal을 total과 같게 만들고 count를 0으로 만듦
+            let updateNotifications = [...this.state.notifications]
+            updateNotifications[index].lastKnownTotal = this.state.notifications[index].total
+            updateNotifications[index].count = 0
+            this.setState({notification: updateNotifications})
+            console.log('알림 제거!!')
+        }
     }
 
     // state: chatroom에 값이 있을 경우 map을 이용해 렌더링
@@ -182,9 +217,9 @@ export class ChatRooms extends Component {
         // 해당 채팅방 count 수 구하기
         let count = 0
 
-        this.state.notifications.forEach(notifications => {
-            if(notifications.id === room.id){
-                count = notifications.count
+        this.state.notifications.forEach(notification => {
+            if(notification.id === room.id){
+                count = notification.count
             }
         })
 

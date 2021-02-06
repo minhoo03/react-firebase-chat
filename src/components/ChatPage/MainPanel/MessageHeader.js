@@ -1,6 +1,6 @@
 // 채팅방 정보
 
-import React from 'react'
+import React, { useState } from 'react'
 
 import { Container, Row, Col } from 'react-bootstrap'
 import { InputGroup, FormControl } from 'react-bootstrap'
@@ -17,6 +17,7 @@ function MessageHeader({handleSearchChange}) {
 
     const chatRoom = useSelector(state => state.chatRoom.currentChatRoom)
     const isPrivateTrueAndFalse = useSelector(state => state.chatRoom.isPrivateTrueAndFalse)
+    const [isFavorite, setIsFavorite] = useState(false)
 
     const buttonStyle = {
         outline: 'none',
@@ -43,7 +44,16 @@ function MessageHeader({handleSearchChange}) {
                             :
                             <BsFillUnlockFill style={{marginBottom:'10px'}} />
                     }
-                    {" "}<AiOutlineHeart style={{marginBottom:'5px'}} />
+                    {" "}
+                    {/* DM 아닐때만 */}
+                    {!isPrivateTrueAndFalse && 
+                        <span style={{cursor:'pointer'}}>
+                            {isFavorite ?
+                                <AiOutlineHeart style={{marginBottom:'5px'}} />
+                                :
+                                <AiFillHeart style={{marginBottom:'5px'}} />
+                            }
+                        </span>}
                     {" "}{chatRoom && chatRoom.name}</h2>
                     </Col>
                     <Col>

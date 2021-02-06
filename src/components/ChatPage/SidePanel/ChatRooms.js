@@ -191,9 +191,8 @@ export class ChatRooms extends Component {
             // lastKnownTotal을 total과 같게 만들고 count를 0으로 만듦
             let updateNotifications = [...this.state.notifications]
             updateNotifications[index].lastKnownTotal = this.state.notifications[index].total
-            updateNotifications[index].count = 0
-            this.setState({notification: updateNotifications})
-            console.log('알림 제거!!')
+            updateNotifications[index].count = 0;
+            this.setState({ notifications: updateNotifications });
         }
     }
 

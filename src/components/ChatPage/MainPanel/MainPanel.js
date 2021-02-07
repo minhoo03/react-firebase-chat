@@ -16,7 +16,9 @@ export class MainPanel extends Component {
         messagesLoading: true,
         searchTerm: "", // search input
         searchResults: [],
-        seatchLoading: false
+        seatchLoading: false,
+        typingRef: firebase.database().ref('typing'),
+        typingUsers: [] // 입력중인 유저
     }
 
     handleSearchChange = e => {
@@ -46,7 +48,34 @@ export class MainPanel extends Component {
         const {chatRoom} = this.props
         if(chatRoom) {
             this.addMessagesListeners(chatRoom.id)
+            this.addTypingListeners(chatRoom.id)
         }
+    }
+
+    // typing table에 추가된 유저 uid가 내 uid와 다르다면.. setState
+    addTypingListeners = (chatRoomId) => {
+        let typingUsers = []
+
+        // typing이 새로 들어올 때
+        this.state.typingRef.child(chatRoomId).on('child_added', DataSnapshot => {
+            if (DataSnapshot.key != this.props.user.uid) {
+                typingUsers = typingUsers.concat({
+                    id: DataSnapshot.key,
+                    name: DataSnapshot.val()
+                })
+                this.setState({typingUsers})
+            }
+        })
+
+        // typing이 지워질 때
+        this.state.typingRef.child(chatRoomId).on('child_removed', DataSnapshot => {
+            // typing DB의 모든 유저 확인 => typing에서 제거된 유저 id가 남았나 확인 => (남았다면 n / 없다면 -1)
+            const index = typingUsers.findIndex(user => user.id === DataSnapshot.key)
+            if(idnex !== -1) { // 만약 '타이핑' 지워진 유저가 index에 있다면 제거
+                typingUsers = typingUsers.filter(user => user.id !== DataSnapshot.key)
+                this.setState({typingUsers})
+            }
+        })
     }
 
     // DB 변동 O => state에 msg 담음

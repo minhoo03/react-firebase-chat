@@ -1,6 +1,6 @@
 // 채팅방 정보
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { Container, Row, Col } from 'react-bootstrap'
 import { InputGroup, FormControl } from 'react-bootstrap'
@@ -27,6 +27,23 @@ function MessageHeader({handleSearchChange}) {
         backgroundColor:'transparent',
         color:'#000000',
         textDecoration: 'none'
+    }
+
+    useEffect(() => {
+        if(chatRoom && user) {
+            addFavoriteLustener(chatRoom.id, user.uid)
+        }
+    }, [])
+
+    const addFavoriteLustener = (chatRoomId, userId) => {
+        usersRef.child(userId).child('favorited').once('value').then(data => { // 한 번 읽어옴
+            // data.val() : 방의 정보 / chatRoomIds : 방의 key(id)
+            if(data.val() !== null) { // 유저 DB에 좋아요 누른 방이 있으면
+                const chatRoomIds = Object.keys(data.val())
+                const isAlreadtFavorited = chatRoomIds.includes(chatRoomId) // DB에서 읽어온 chatRoomIds중 현재 내가 속한 chatRoom.id가 있다면 true
+                setIsFavorite(isAlreadtFavorited)
+            }
+        })
     }
 
     const handleFavorite = () => {

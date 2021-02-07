@@ -60,13 +60,6 @@ export class FavoritePanel extends Component {
     }
 
 
-    changeChatRoom = (chatRoom) => { // onClick으로 chatRoom 정보가 넘어온다
-        this.props.dispatch(setCurrentChatRoom(chatRoom)) // 현재 내가 있는 방을 Redux로
-        this.props.dispatch(setPrivateChatRoom(false))
-        this.setState({activeChatRoomId: chatRoom.id})
-    }
-
-
     renderFavotiredChatRoom = (favoritedChatRoom) => {
         return favoritedChatRoom.length > 0 && favoritedChatRoom.map(chatRoom => (
             <li key={chatRoom.id} onClick={() => this.changeChatRoom(chatRoom)} 
@@ -77,6 +70,13 @@ export class FavoritePanel extends Component {
         ))
     }
 
+
+    changeChatRoom = (chatRoom) => { // onClick으로 chatRoom 정보가 넘어온다
+        this.props.dispatch(setCurrentChatRoom(chatRoom)) // 현재 내가 있는 방을 Redux로
+        this.props.dispatch(setPrivateChatRoom(false))
+        this.setState({activeChatRoomId: chatRoom.id})
+    }
+    
 
     render() {
         const { favoritedChatRoom } = this.state

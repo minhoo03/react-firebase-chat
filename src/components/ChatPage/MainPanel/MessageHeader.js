@@ -57,7 +57,7 @@ function MessageHeader({handleSearchChange}) {
                 [chatRoom.id] : {
                     name: chatRoom.name,
                     description: chatRoom.description,
-                    createdBy: {
+                    createBy: {
                         name: chatRoom.createBy.name,
                         image: chatRoom.createBy.image
                     }
@@ -94,7 +94,8 @@ function MessageHeader({handleSearchChange}) {
                                 :
                                 <AiOutlineHeart style={{marginBottom:'5px'}} onClick={handleFavorite} />
                             }
-                        </span>}
+                        </span>
+                        }
                     {" "}{chatRoom && chatRoom.name}</h2>
                     </Col>
                     <Col>
@@ -132,7 +133,7 @@ function MessageHeader({handleSearchChange}) {
                                 <Card style={{marginTop:'1rem'}}>
                                     <Card.Header style={{padding:'0 1rem', backgroundColor:'transparent'}} className="card-button">
                                     <Accordion.Toggle variant="link" eventKey="0" style={buttonStyle}>
-                                        Created By
+                                        Create By
                                     </Accordion.Toggle>
                                     </Card.Header>
                                     <Accordion.Collapse eventKey="0">

@@ -57,21 +57,23 @@ export class MainPanel extends Component {
         let typingUsers = []
 
         // typing이 새로 들어올 때
-        this.state.typingRef.child(chatRoomId).on('child_added', DataSnapshot => {
-            if (DataSnapshot.key != this.props.user.uid) {
+        // DB를 실시간 확인 => !Redux user => setState -> renderTypingUser()
+        this.state.typingRef.child(chatRoomId).on("child_added",
+        DataSnapshot => {
+            if (DataSnapshot.key !== this.props.user.uid) {
                 typingUsers = typingUsers.concat({
                     id: DataSnapshot.key,
                     name: DataSnapshot.val()
-                })
-                this.setState({typingUsers})
+                });
+                this.setState({ typingUsers });
             }
-        })
+        });
 
         // typing이 지워질 때
         this.state.typingRef.child(chatRoomId).on('child_removed', DataSnapshot => {
             // typing DB의 모든 유저 확인 => typing에서 제거된 유저 id가 남았나 확인 => (남았다면 n / 없다면 -1)
             const index = typingUsers.findIndex(user => user.id === DataSnapshot.key)
-            if(idnex !== -1) { // 만약 '타이핑' 지워진 유저가 index에 있다면 제거
+            if(index !== -1) { // 만약 '타이핑' 지워진 유저가 index에 있다면 제거
                 typingUsers = typingUsers.filter(user => user.id !== DataSnapshot.key)
                 this.setState({typingUsers})
             }
@@ -102,8 +104,16 @@ export class MainPanel extends Component {
             />
     ))
 
+
+    // state가 있다면 -> setState된 유저들을 map => span
+    renderTypingUsers = (typingUsers) => {
+        return typingUsers.length > 0 && typingUsers.map(user => {
+            return <span>{user.name}님이 채팅을 입력하고 있습니다..</span>
+        })
+    }
+
     render() {
-        const{ messages, searchResults, searchTerm } = this.state
+        const{ messages, searchResults, searchTerm, typingUsers } = this.state
 
         return (
             <div style={{padding: '2rem 2rem 0 2rem'}}>
@@ -123,6 +133,7 @@ export class MainPanel extends Component {
                         :
                         this.renderMessages(messages)
                     }
+                    {this.renderTypingUsers(typingUsers)}
                 </div>
 
                 <MessageForm />
@@ -133,7 +144,7 @@ export class MainPanel extends Component {
 
 const mapStateToProps = state => {
     return {
-        user: state.user.currenUser,
+        user: state.user.currentUser,
         chatRoom: state.chatRoom.currentChatRoom
     }
 }

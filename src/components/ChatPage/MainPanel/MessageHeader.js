@@ -5,17 +5,20 @@ import React, { useState } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import { InputGroup, FormControl } from 'react-bootstrap'
 import { Accordion, Card } from 'react-bootstrap'
-
 import Image from 'react-bootstrap/Image'
 
 import { BsFillUnlockFill,BsFillLockFill } from 'react-icons/bs'
 import { AiOutlineHeart,AiFillHeart, AiOutlineSearch } from 'react-icons/ai'
 
 import { useSelector } from 'react-redux'
+import firebase from '../../../firebase'
 
 function MessageHeader({handleSearchChange}) {
 
+    const usersRef = firebase.database().ref('users')
     const chatRoom = useSelector(state => state.chatRoom.currentChatRoom)
+    const user = useSelector(state => state.user.currentUser)
+
     const isPrivateTrueAndFalse = useSelector(state => state.chatRoom.isPrivateTrueAndFalse)
     const [isFavorite, setIsFavorite] = useState(false)
 
@@ -24,6 +27,27 @@ function MessageHeader({handleSearchChange}) {
         backgroundColor:'transparent',
         color:'#000000',
         textDecoration: 'none'
+    }
+
+    const handleFavorite = () => {
+        if(isFavorite) {
+            usersRef.child(`${user.uid}/favorited`).child(chatRoom.id).remove(err => {
+                if(err !== null) return console.log(err)
+            })
+            setIsFavorite(prev => !prev)
+        } else {
+            usersRef.child(`${user.uid}/favorited`).update({
+                [chatRoom.id] : {
+                    name: chatRoom.name,
+                    description: chatRoom.description,
+                    createdBy: {
+                        name: chatRoom.createBy.name,
+                        image: chatRoom.createBy.image
+                    }
+                }
+            })
+            setIsFavorite(prev => !prev)
+        }
     }
 
     return (
@@ -49,9 +73,9 @@ function MessageHeader({handleSearchChange}) {
                     {!isPrivateTrueAndFalse && 
                         <span style={{cursor:'pointer'}}>
                             {isFavorite ?
-                                <AiOutlineHeart style={{marginBottom:'5px'}} />
+                                <AiFillHeart style={{marginBottom:'5px'}} onClick={handleFavorite} />
                                 :
-                                <AiFillHeart style={{marginBottom:'5px'}} />
+                                <AiOutlineHeart style={{marginBottom:'5px'}} onClick={handleFavorite} />
                             }
                         </span>}
                     {" "}{chatRoom && chatRoom.name}</h2>

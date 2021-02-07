@@ -18,7 +18,8 @@ export class MainPanel extends Component {
         searchResults: [],
         seatchLoading: false,
         typingRef: firebase.database().ref('typing'),
-        typingUsers: [] // 입력중인 유저
+        typingUsers: [], // 입력중인 유저
+        listenerLists: []
     }
 
     handleSearchChange = e => {
@@ -52,6 +53,20 @@ export class MainPanel extends Component {
         }
     }
 
+
+    componentWillUnmount() {
+        this.removeListeners(this.state.listenerLists)
+        this.state.messageRef.off()
+    }
+
+
+    removeListeners = (listeners) => {
+        listeners.forEach(listner => {
+            listener.ref.child(listener.id).off(listener.event)
+        })
+    }
+
+
     // typing table에 추가된 유저 uid가 내 uid와 다르다면.. setState
     addTypingListeners = (chatRoomId) => {
         let typingUsers = []
@@ -69,6 +84,9 @@ export class MainPanel extends Component {
             }
         });
 
+        // listenerLists state에 등록된 리스너를 넣어주기
+        this.addToListenerLists(chatRoomId, this.state.typingRef, "child_added")
+
         // typing이 지워질 때
         this.state.typingRef.child(chatRoomId).on('child_removed', DataSnapshot => {
             // typing DB의 모든 유저 확인 => typing에서 제거된 유저 id가 남았나 확인 => (남았다면 n / 없다면 -1)
@@ -78,7 +96,30 @@ export class MainPanel extends Component {
                 this.setState({typingUsers})
             }
         })
+
+        // listenerLists state에 등록된 리스너를 넣어주기
+        this.addToListenerLists(chatRoomId, this.state.typingRef, "child_removed")
     }
+
+
+    addToListenerLists = (id, ref, event) => {
+        // 이미 등록된 리스너인지 확인
+        const index = this.state.listenerLists.findIndex(listener => {
+            return (
+                listener.id === id && 
+                listener.ref === ref &&
+                listener.event === event
+            )
+        })
+
+        if(index === -1) { // 이미 있다면
+            const newListeners = { id, ref, event }
+            this.setState({
+                listenerLists: this.state.listenerLists.concat(newListeners) // 기존 state에 추가
+            })
+        }
+    }
+
 
     // DB 변동 O => state에 msg 담음
     addMessagesListeners = (chatRoomId) => {

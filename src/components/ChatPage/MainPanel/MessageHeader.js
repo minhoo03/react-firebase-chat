@@ -111,41 +111,40 @@ function MessageHeader({handleSearchChange}) {
                         </InputGroup>
                     </Col>
                 </Row>
-                <div style={{display: 'flex', justifyContent:'flex-end'}}>
-                    <p>
-                        <Image src={chatRoom && chatRoom.createBy.image} roundedCircle style={{width:'30px', height:'30px'}} /> {" "}{chatRoom && chatRoom.createBy.name}
-                    </p>
-                </div>
-                <Row>
-                    <Col>
-                        <Accordion>
-                            <Card style={{border:'0px'}}>
-                                <Card.Header style={{padding:'0 1rem', backgroundColor:'transparent'}} className="card-button">
-                                <Accordion.Toggle variant="link" eventKey="0" style={buttonStyle}>
-                                    Description
-                                </Accordion.Toggle>
-                                </Card.Header>
-                                <Accordion.Collapse eventKey="0">
-                                <Card.Body>{chatRoom && chatRoom.description}</Card.Body>
-                                </Accordion.Collapse>
-                            </Card>
-                        </Accordion>
-                    </Col>
-                    <Col>
-                        <Accordion>
-                            <Card style={{border:'0px'}}>
-                                <Card.Header style={{padding:'0 1rem', backgroundColor:'transparent'}} className="card-button">
-                                <Accordion.Toggle variant="link" eventKey="0" style={buttonStyle}>
-                                    Click me!
-                                </Accordion.Toggle>
-                                </Card.Header>
-                                <Accordion.Collapse eventKey="0">
-                                <Card.Body>Hello! I'm the body</Card.Body>
-                                </Accordion.Collapse>
-                            </Card>
-                        </Accordion>
-                    </Col>
+                {!isPrivateTrueAndFalse &&
+                    <Row>
+                        <Col>
+                            <Accordion>
+                                <Card style={{marginTop:'1rem'}}>
+                                    <Card.Header style={{padding:'0 1rem', backgroundColor:'transparent'}} className="card-button">
+                                    <Accordion.Toggle variant="link" eventKey="0" style={buttonStyle}>
+                                        Description
+                                    </Accordion.Toggle>
+                                    </Card.Header>
+                                    <Accordion.Collapse eventKey="0">
+                                    <Card.Body>{chatRoom && chatRoom.description}</Card.Body>
+                                    </Accordion.Collapse>
+                                </Card>
+                            </Accordion>
+                        </Col>
+                        <Col>
+                            <Accordion>
+                                <Card style={{marginTop:'1rem'}}>
+                                    <Card.Header style={{padding:'0 1rem', backgroundColor:'transparent'}} className="card-button">
+                                    <Accordion.Toggle variant="link" eventKey="0" style={buttonStyle}>
+                                        Created By
+                                    </Accordion.Toggle>
+                                    </Card.Header>
+                                    <Accordion.Collapse eventKey="0">
+                                    <Card.Body>
+                                        <Image src={chatRoom && chatRoom.createBy.image} roundedCircle style={{width:'30px', height:'30px'}} /> {" "}{chatRoom && chatRoom.createBy.name}'s room
+                                    </Card.Body>
+                                    </Accordion.Collapse>
+                                </Card>
+                            </Accordion>
+                        </Col>
                 </Row>
+                }
             </Container>
         </div>
     )

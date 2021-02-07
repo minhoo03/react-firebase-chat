@@ -21,6 +21,7 @@ function MessageForm() {
     // image upload
     const inputOpenImageRef = useRef()
     const storageRef = firebase.storage().ref()
+    const typingRef = firebase.database().ref('typing')
 
     // 메세지 객체 생성
     const createMessage = (fileURL = null) => {
@@ -54,6 +55,7 @@ function MessageForm() {
         // firebase에 메시지 저장하는 부분
         try {
             await messageRef.child(chatRoom.id).push().set(createMessage())
+            typingRef.child(chatRoom.id).child(user.uid).remove() // typing 삭제
             setLoading(false)
             setContent("")
         } catch(error) {
@@ -120,11 +122,21 @@ function MessageForm() {
         }
     }
 
+    const handleKeyDown = () => {
+
+        if(content) {
+            typingRef.child(chatRoom.id).child(user.uid).set(user.displayName)
+        } else {
+            typingRef.child(chatRoom.id).child(user.uid).remove()
+        }
+
+    }
+
     return (
         <div>
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="exampleForm.ControlTextarea1">
-                    <Form.Control as="textarea" rows={3} value={content} onChange={handleChange} />
+                    <Form.Control onKeyDown={handleKeyDown} as="textarea" rows={3} value={content} onChange={handleChange} />
                 </Form.Group>
             </Form>
 

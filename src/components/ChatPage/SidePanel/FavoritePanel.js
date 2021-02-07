@@ -20,6 +20,16 @@ export class FavoritePanel extends Component {
         }
     }
 
+    componentWillUnmount() {
+        if(this.props.user) {
+            this.removeListener(this.props.user.uid)
+        }
+    }
+
+    removeListener = (userId) => {
+        this.state.usersRef.child(`${userId}/favorited`).off()
+    }
+
 
     addListeners = (userId) => {
         const { usersRef } = this.state

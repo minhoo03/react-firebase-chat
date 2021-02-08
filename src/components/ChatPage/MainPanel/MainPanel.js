@@ -10,6 +10,8 @@ import firebase from '../../../firebase'
 
 export class MainPanel extends Component {
 
+    messageEndRef = React.createRef()
+
     state = {
         messages: [], // 보낸 이의 chat, user, chatRoom 정보
         messageRef: firebase.database().ref("messages"),
@@ -62,8 +64,15 @@ export class MainPanel extends Component {
 
     removeListeners = (listeners) => {
         listeners.forEach(listner => {
-            listener.ref.child(listener.id).off(listener.event)
+            listner.ref.child(listner.id).off(listner.event)
         })
+    }
+
+    // ref가 참조하고 있는 messageEndRef로 스크롤한다
+    componentDidUpdate() {
+        if(this.messageEndRef) {
+            this.messageEndRef.scrollIntoView({behavior: 'smooth'})
+        }
     }
 
 
@@ -175,6 +184,8 @@ export class MainPanel extends Component {
                         this.renderMessages(messages)
                     }
                     {this.renderTypingUsers(typingUsers)}
+                    {/* node는 현재 div를 가르킨다 => messageEndRef가 div를 참조 중 */}
+                    <div ref={node => (this.messageEndRef = node)} />
                 </div>
 
                 <MessageForm />

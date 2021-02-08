@@ -8,6 +8,8 @@ import MessageForm from './MessageForm'
 import { connect } from 'react-redux'
 import firebase from '../../../firebase'
 
+import Skeleton from '../../../commons/components/Skeleton'
+
 export class MainPanel extends Component {
 
     messageEndRef = React.createRef()
@@ -162,8 +164,19 @@ export class MainPanel extends Component {
         })
     }
 
+    renderMessageSkeleton = (messagesLoading) => {
+      return messagesLoading && (
+           <>
+           {/* 4개의 배열을 maping */}
+            {[...Array(4)].map(i =>
+                <Skeleton key={i} />
+            )}
+           </>
+       ) 
+    }
+
     render() {
-        const{ messages, searchResults, searchTerm, typingUsers } = this.state
+        const{ messages, searchResults, searchTerm, typingUsers, messagesLoading } = this.state
 
         return (
             <div style={{padding: '2rem 2rem 0 2rem'}}>
@@ -178,6 +191,8 @@ export class MainPanel extends Component {
                     marginBottom:'1rem',
                     overflowY:'auto'
                 }}>
+
+                    {this.renderMessageSkeleton(messagesLoading)}
                     {searchTerm ?
                         this.renderMessages(searchResults)
                         :

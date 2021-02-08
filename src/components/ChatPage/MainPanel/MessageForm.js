@@ -122,21 +122,26 @@ function MessageForm() {
         }
     }
 
-    const handleKeyDown = () => {
+    const handleKeyDown = (event) => {
 
+        // typing User UI
         if(content) {
             typingRef.child(chatRoom.id).child(user.uid).set(user.displayName)
         } else {
             typingRef.child(chatRoom.id).child(user.uid).remove()
         }
 
+        // send Chat
+        if(event.ctrlKey && event.keyCode === 13) {
+            handleSubmit()
+        }
     }
 
     return (
         <div>
             <Form onSubmit={handleSubmit}>
                 <Form.Group controlId="exampleForm.ControlTextarea1">
-                    <Form.Control onKeyDown={handleKeyDown} as="textarea" rows={3} value={content} onChange={handleChange} />
+                    <Form.Control onKeyDown={handleKeyDown} as="textarea" rows={3} value={content} onChange={handleChange} placeholder="Ctrl키를 누른 상태로 Enter를 누를 시 전송됩니다." />
                 </Form.Group>
             </Form>
 
@@ -153,7 +158,7 @@ function MessageForm() {
                 </Col>
 
                 <Col>
-                    <button className="msgForm-button" disabled={loading ? true: false} onClick={handleSubmit}>Send</button>
+                    <button className="msgForm-button" disabled={loading ? true: false} onClick={handleSubmit} onKeyDown={handleKeyDown}>Send</button>
                 </Col>
             </Row>
             <input type="file" style={{ display: 'none' }} ref={inputOpenImageRef} onChange={handleUploadImage} />

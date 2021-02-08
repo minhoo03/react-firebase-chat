@@ -164,6 +164,9 @@ export class MainPanel extends Component {
         })
     }
 
+
+    // DB의 message를 state에 담을 때 Loading은 false가 된다...
+    // 그러므로 true인 동안은 skeleton 작업 중
     renderMessageSkeleton = (messagesLoading) => {
       return messagesLoading && (
            <>

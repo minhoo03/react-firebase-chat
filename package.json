@@ -10,6 +10,7 @@
     "firebase": "^8.2.4",
     "md5": "^2.3.0",
     "moment": "^2.29.1",
+    "node-sass": "^4.14.1",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",
     "react-dom": "^17.0.1",
@@ -50,7 +51,6 @@
   },
   "devDependencies": {
     "css-loader": "^5.0.1",
-    "node-sass": "^5.0.0",
     "sass-loader": "^10.1.1",
     "style-loader": "^2.0.0"
   }

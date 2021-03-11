@@ -107,6 +107,8 @@ function MessageForm() {
                     console.log(err)
                     setLoading(false)
                 },
+
+                // percent
                 () => {
                     // upload 완료 후 메시지 전송 (DB에 저장)
                     // 저장된 파일 URL
@@ -117,6 +119,7 @@ function MessageForm() {
                     })
                 }
             )
+            // percent
         } catch (error) {
             alert(error)
         }

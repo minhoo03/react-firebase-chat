@@ -234,6 +234,7 @@ export class ChatRooms extends Component {
                 }}>
                     <AiOutlineSmile style={{marginRight: 3}} />
                     ChatRooms {" "} (1)
+                    {/* ({this.state.driveRooms.length}) */}
                     <AiOutlinePlus style={{
                         position: 'absolute', right:0, cursor: 'pointer'
                     }} onClick={this.handleShow} />

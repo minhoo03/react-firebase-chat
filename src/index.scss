@@ -15,12 +15,12 @@ body {
         margin: 0 auto;
     }
 
-    h1 {
+    h3 {
         font-weight: 100;
         color: #222;
         text-align: center;
         padding-bottom: 10px;
-        border-bottom: 1px solid rgb(79, 98, 148);
+        // border-bottom: 1px solid rgb(79, 98, 148);
     }
 
     .form {
@@ -61,7 +61,7 @@ body {
 
     button[type='submit'],
     input[type='submit'] {
-        background: #7b83eb;
+        background: #440a67;
         color: white;
         text-transform: uppercase;
         border: none;
@@ -74,7 +74,7 @@ body {
 
     button[type='submit']:hover,
     input[type='submit']:hover {
-        background: #6770e4;
+        background: #440a67;
     }
 
     button[type='submit']:active,
@@ -139,7 +139,7 @@ button {
 
 .msgForm-button {
     width: 100%;
-    background: #7b83eb;
+    background: #440a67;
     color: white;
     text-transform: uppercase;
     border: none;
@@ -149,6 +149,6 @@ button {
     font-weight: 100;
     letter-spacing: 4px;
     &:hover {
-        background: #6770e4;
+        background: #30054b;
     }
 }

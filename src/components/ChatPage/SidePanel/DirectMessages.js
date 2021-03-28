@@ -77,7 +77,7 @@ export class DirectMessages extends Component {
         return (
             <div>
                 <span style={{display:'flex', alignItems:'center'}}>
-                    <AiOutlineSmile style={{marginRight: 3}} /> Direct Messages(1)
+                    <AiOutlineSmile style={{marginRight: 3}} /> Direct Messages({this.state.users && this.state.users.length})
                 </span>
 
                 <ul style={{listStyleType: 'none', padding: 0}}>

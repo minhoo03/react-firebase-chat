@@ -18,7 +18,7 @@ function MessageHeader({handleSearchChange}) {
     const usersRef = firebase.database().ref('users')
     const chatRoom = useSelector(state => state.chatRoom.currentChatRoom)
     const user = useSelector(state => state.user.currentUser)
-
+    
     const isPrivateTrueAndFalse = useSelector(state => state.chatRoom.isPrivateTrueAndFalse)
     const [isFavorite, setIsFavorite] = useState(false)
 

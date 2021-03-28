@@ -233,7 +233,7 @@ export class ChatRooms extends Component {
                     display: 'flex', alignItems: 'center'
                 }}>
                     <AiOutlineSmile style={{marginRight: 3}} />
-                    ChatRooms {" "} (1)
+                    ChatRooms {" "} ({this.state.chatRooms && this.state.chatRooms.length})
                     {/* ({this.state.driveRooms.length}) */}
                     <AiOutlinePlus style={{
                         position: 'absolute', right:0, cursor: 'pointer'

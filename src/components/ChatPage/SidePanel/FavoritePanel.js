@@ -83,7 +83,7 @@ export class FavoritePanel extends Component {
         return (
             <div>
                 <span style={{display:'flex', alignItems:'center'}}>
-                    <AiOutlineSmile style={{marginRight: '3px'}} /> FAVORITE (1)
+                    <AiOutlineSmile style={{marginRight: '3px'}} /> FAVORITE ({this.state.favoritedChatRoom && this.state.favoritedChatRoom.length})
                 </span>
 
                 <ul style={{listStyleType: 'none', padding: '0'}}>
